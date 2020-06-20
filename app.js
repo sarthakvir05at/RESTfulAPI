@@ -23,6 +23,8 @@ const articleSchema= new mongoose.Schema({
 
 const Article= mongoose.model("Article", articleSchema);
 
+///////////////////////////////////////////////////// Request Targeting All Articles//////////////////////////////////////
+
 app.get("/article", (req,res) => {
     Article.find({}, (err,foundArticle) => {
         if(!err)
@@ -54,6 +56,56 @@ app.delete("/article", (req,res) => {
         res.send("Successfully Deleted All Articles");
         else
         res.send(err);
+    })
+});
+
+///////////////////////////////////////////////////// Request Targeting Specific Article//////////////////////////////////////
+
+app.get("/article/:articleTitle", (req,res) => {
+
+    const articleTitle= req.params.articleTitle;
+    Article.findOne({title: articleTitle}, (err,doc) => {
+        if(!err)
+        res.send(doc);
+        else
+        res.send(err);
+    });
+});
+
+app.put("/article/:articleTitle", (req,res) => {
+
+    Article.update(
+        { title: req.params.articleTitle },
+        { title: req.body.title, content: req.body.content },
+        { overwrite: true },
+        (err, doc) => {
+            if(!err)
+            res.send(doc);
+            else
+            res.send(err)
+        } )
+});
+
+app.patch("/article/:articleTitle", (req,res) => {
+
+    Article.update(
+        { title: req.params.articleTitle },
+        { $set: req.body },
+        (err,doc) => {
+            if(!err)
+            res.send(doc);
+            else
+            res.send(err);
+        })
+});
+
+app.delete("/article/:articleTitle", (req,res) => {
+
+    Article.deleteOne({ title: req.params.articleTitle }, (err) => {
+        if(!err)
+        res.send("Document/Record Deleted");
+        else
+        res.send("Cannot delete");
     })
 })
 
