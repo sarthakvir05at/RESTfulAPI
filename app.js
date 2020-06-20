@@ -32,6 +32,23 @@ app.get("/article", (req,res) => {
     })
 })
 
+app.post("/article", (req,res) => {
+    const title= req.body.title;
+    const content= req.body.content;
+
+    const newArticle= new Article({
+        title,
+        content
+    });
+    newArticle.save((err, doc) => {
+        if(!err)
+        res.send("Data Saved Successfully");
+        else
+        res.send(err);
+    });
+
+});
+
 app.listen(3000, () => {
     console.log('Server is up and ready');
 })
