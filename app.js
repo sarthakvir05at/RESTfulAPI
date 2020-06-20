@@ -46,8 +46,16 @@ app.post("/article", (req,res) => {
         else
         res.send(err);
     });
-
 });
+
+app.delete("/article", (req,res) => {
+    Article.deleteMany({}, (err) => {
+        if(!err)
+        res.send("Successfully Deleted All Articles");
+        else
+        res.send(err);
+    })
+})
 
 app.listen(3000, () => {
     console.log('Server is up and ready');
